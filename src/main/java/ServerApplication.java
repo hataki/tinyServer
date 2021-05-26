@@ -21,12 +21,15 @@ public class ServerApplication {
     static public void main(String[] argArray) {
         /**
          * 2个线程池
+         * 一个用于接受请求的链接 但不处理
+         * 一个用于处理链接的请求
+         * 采用时间驱动 ---- 轮询
          */
-        EventLoopGroup bossGroup = new NioEventLoopGroup();
+        EventLoopGroup acceptGroup = new NioEventLoopGroup();
         EventLoopGroup workerGroup = new NioEventLoopGroup();
 
         ServerBootstrap b = new ServerBootstrap();
-        b.group(bossGroup, workerGroup);
+        b.group(acceptGroup, workerGroup);
         b.channel(NioServerSocketChannel.class); // 服务器信道的处理方式
         b.childHandler(new ChannelInitializer<SocketChannel>() { // 客户端信道的处理器方式
             @Override
